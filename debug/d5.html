@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><title>d5</title></head><body><p id="o">start</p>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { initializeAuth, indexedDBLocalPersistence, browserLocalPersistence, browserPopupRedirectResolver, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
+import { getFirestore, doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+  const CFG = {
+    apiKey: 'AIzaSyBxfTpEtR3HYdTdUbQNn2ALtneoMbFsIGY',
+    authDomain: 'coaching-a9532.firebaseapp.com',
+    projectId: 'coaching-a9532',
+    storageBucket: 'coaching-a9532.firebasestorage.app',
+    messagingSenderId: '106829882648',
+    appId: '1:106829882648:web:ccd1dbb5b04c6011816a6d',
+  };
+const app = initializeApp(CFG);
+const auth = initializeAuth(app, { persistence: [indexedDBLocalPersistence, browserLocalPersistence], popupRedirectResolver: browserPopupRedirectResolver });
+onAuthStateChanged(auth, u => {
+  document.getElementById('o').textContent = u ? 'signed in ' + u.uid.slice(0, 4) : 'signed out';
+  if (u) onSnapshot(doc(getFirestore(app), 'users', u.uid, 'data', 'meta'), s => document.getElementById('o').textContent += ' / snap rev ' + (s.exists() ? s.data().rev : '-'));
+});
+</script></body></html>
