@@ -1,1 +1,0 @@
-<!doctype html><html><head><meta charset="utf-8"><title>d6</title></head><body><p id="o">idb</p><script>const r=indexedDB.open("firebaseLocalStorageDb");r.onsuccess=()=>{document.getElementById("o").textContent="idb ok "+[...r.result.objectStoreNames].join(",")};r.onerror=()=>{document.getElementById("o").textContent="idb err"}</script></body></html>
