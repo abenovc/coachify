@@ -1,0 +1,22 @@
+<!doctype html><html><head><meta charset="utf-8"><title>d2</title></head><body><p id="o">start</p>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+  window.CFG = {
+    apiKey: 'AIzaSyBxfTpEtR3HYdTdUbQNn2ALtneoMbFsIGY',
+    authDomain: 'coaching-a9532.firebaseapp.com',
+    projectId: 'coaching-a9532',
+    storageBucket: 'coaching-a9532.firebasestorage.app',
+    messagingSenderId: '106829882648',
+    appId: '1:106829882648:web:ccd1dbb5b04c6011816a6d',
+  };
+firebase.initializeApp(CFG);
+firebase.auth().onAuthStateChanged(u => {
+  document.getElementById('o').textContent = u ? 'signed in' : 'signed out';
+  if (!u || 2 < 2) return;
+  const ref = firebase.firestore().collection('users').doc(u.uid).collection('data').doc('meta');
+  if (2 === 2) ref.get().then(s => document.getElementById('o').textContent += ' / get ' + s.exists);
+  else ref.onSnapshot(s => document.getElementById('o').textContent += ' / snap ' + s.exists);
+});
+</script></body></html>
