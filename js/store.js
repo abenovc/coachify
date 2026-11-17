@@ -1,4 +1,5 @@
-/* Хранилище: все данные тренера лежат в localStorage браузера (ключ coach.v1).
+/* Хранилище: все данные тренера лежат в localStorage браузера (ключ coach.v1);
+   после входа в аккаунт их копию ведёт js/sync.js.
    Большие кэши Codeforces (архив задач, посылки учеников) — в IndexedDB. */
 const Store = (() => {
   const KEY = 'coach.v1';
@@ -15,11 +16,13 @@ const Store = (() => {
     clearTimeout(timer); timer = null;
     try { localStorage.setItem(KEY, JSON.stringify(state)); failed = false; }
     catch (e) { if (!failed) { failed = true; alert('Не удалось сохранить данные в браузере. Сделайте резервную копию в «Настройках».'); } }
+    if (api.onChange) api.onChange();
   }
   window.addEventListener('beforeunload', () => { if (timer) flush(); });
   document.addEventListener('visibilitychange', () => { if (timer && document.hidden) flush(); });
 
-  return {
+  const api = {
+    onChange: null, // сюда подключается синхронизация с аккаунтом (js/sync.js)
     get s() { return state; },
     save() { flush(); },
     saveSoon() { clearTimeout(timer); timer = setTimeout(flush, 400); },
@@ -30,6 +33,7 @@ const Store = (() => {
     topics: () => BUILTIN_TOPICS.concat(state.customTopics),
     topic: id => BUILTIN_TOPICS.find(t => t.id === id) || state.customTopics.find(t => t.id === id),
   };
+  return api;
 })();
 
 const Cache = (() => {
